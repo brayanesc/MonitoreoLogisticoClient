@@ -1,0 +1,39 @@
+﻿@model IEnumerable<MonitoreoLogisticoClient.Models.DetalleItinerario>
+
+@{
+    ViewBag.Title = "Detalles Itinerario";
+}
+
+<h2>Listado de Detalles Itinerario</h2>
+
+<p>
+    @Html.ActionLink("Create New", "AddorEdit")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Salida)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Llegada)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Salida)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Llegada)
+        </td>
+        <td>
+            @Html.ActionLink("Modificar", "AddorEdit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Eliminar", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

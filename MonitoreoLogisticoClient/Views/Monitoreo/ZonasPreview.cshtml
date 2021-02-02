@@ -1,0 +1,72 @@
+﻿
+@{
+    ViewBag.Title = "ZonasPreview";
+}
+
+<h2>ZonasPreview</h2>
+
+<style>
+    #map {
+        height: 600px;
+    }
+</style>
+
+
+<script type="text/javascript">
+    var map;
+    
+    function initMap()
+    {
+        geocoder = new google.maps.Geocoder();
+        var polygonArray = [];
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: {
+                lat: -17.78218
+                , lng: -63.17472
+            }
+            , zoom: 14, //disableDefaultUI: true
+        });
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("DatosZonificacion","Monitoreo")',
+            dataType: 'json',
+            contentType: 'application/x-www-form-urlencoded',
+            success: function (data) {
+                console.log("DATA", data);
+
+
+                $.each(data, function (i, item) {
+                    var Coords = [];
+
+
+                    $.each(item.Coordenadas, function (i, itemc) {
+                        Coords.push({ lat: parseFloat(itemc.lat), lng: parseFloat(itemc.lng) });
+                    })
+
+                    var bermudaTriangle = new google.maps.Polygon({
+                        paths: Coords,
+                        strokeColor: '#FF0000',
+                        strokeOpacity: 0.8,
+                        strokeWeight: 2,
+                        fillColor: '#FF0000',
+                        fillOpacity: 0.35
+                    });
+
+                    bermudaTriangle.setMap(map);
+
+
+                })
+
+
+            }
+        });
+
+
+    }
+
+</script>
+
+<h2>ZonasPreview</h2>
+<div id="map"></div>
+<div id="info"></div>

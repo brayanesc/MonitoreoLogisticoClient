@@ -1,0 +1,72 @@
+﻿@model MonitoreoLogisticoClient.Models.OrdenEntrega
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Esta seguro que desea eliminar este registro?</h3>
+<div>
+    <h4>OrdenEntrega</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FecharEmision)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FecharEmision)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NroFactura)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NroFactura)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Estado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Estado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Prioridad)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Prioridad)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ItinerarioId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ItinerarioId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ClienteId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClienteId)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Volver a Listado", "Index")
+        </div>
+    }
+</div>

@@ -1,0 +1,32 @@
+﻿@model IEnumerable<MonitoreoLogisticoClient.Models.Rol>
+
+@{
+    ViewBag.Title = "Roles";
+}
+
+<h2>Listado de Roles</h2>
+
+<p>
+    @Html.ActionLink("Agregar Rol", "AddorEdit")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.NombreRol)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.NombreRol)
+        </td>
+        <td>
+            @Html.ActionLink("Editar", "AddorEdit", new { id=item.Id }) |
+            @Html.ActionLink("Eliminar", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

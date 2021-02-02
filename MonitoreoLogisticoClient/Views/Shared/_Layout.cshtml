@@ -1,0 +1,815 @@
+﻿@*
+    <html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>@ViewBag.Title - My ASP.NET Application</title>
+
+
+        @Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")
+
+
+        <link rel="stylesheet" href="~/Content/style-login.css" />
+        <link rel="stylesheet" href="~/Content/style.default.css" id="theme-stylesheet" />
+        <link rel="shortcut icon" href="~/Content/img/rogur.jpg" />
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.js" type="text/javascript"></script>
+
+
+
+        <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+        <script src="~/Scripts/jquery.signalR-2.2.3.min.js"></script>
+        <script src="http://localhost:5757/signalr/hubs"></script>
+
+    </head>
+    <body>
+        <div class="page">
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <header class="header">
+                    <nav class="navbar">
+
+
+
+                        <div class="container-fluid">
+                            <div class="navbar-holder d-flex align-items-center justify-content-between">
+                                <!-- Navbar Header-->
+                                <div class="navbar-header">
+                                    <!-- Navbar Brand --><a href="@Url.Action("Index","Home")" class="navbar-brand">
+                                        <div class="brand-text brand-big"><span>Roghur </span><strong>S.A</strong></div>
+                                        <div class="brand-text brand-small"><strong>Roghur</strong></div>
+                                    </a>
+                                    <!-- Toggle Button--><a id="toggle-btn" href="#" class="menu-btn active"><span></span><span></span><span></span></a>
+                                </div>
+                                <!-- Navbar Menu -->
+                                <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+                                    <!-- Search-->
+
+                                    <!-- Notifications-->
+                                    <!-- Messages                        -->
+                                    <!-- Languages dropdown    -->
+                                    <!-- Logout    -->
+
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("Logout","Account")" class="nav-link logout">
+                                                Cerrar Sesion
+                                                <i class="fa fa-sign-out"></i>
+                                            </a>
+                                        </li>
+
+                                    }
+                                    @if (!User.Identity.IsAuthenticated)
+                                    {
+                                        <li class="nav-item">
+                                            <a href="#" class="nav-link" data-toggle="modal" data-target="#login-modal">
+                                                Iniciar Sesion
+                                            </a>
+                                        </li>
+
+                                    }
+
+
+
+                                </ul>
+                            </div>
+                        </div>
+                    </nav>
+                </header>
+
+            }
+
+
+            <div class="page-content d-flex align-items-stretch">
+
+
+                <nav class="side-navbar">
+                    <!-- Sidebar Header-->
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="sidebar-header d-flex align-items-center">
+                            <div class="avatar"><img src="~/Content/img/rogur.jpg" alt="..." class="img-fluid rounded-circle"></div>
+                            <div class="title">
+
+                                <h1 class="h4">@User.Identity.Name</h1>
+                                <p>Encargado de Logistica</p>
+                            </div>
+                        </div>
+                    }
+
+
+                    <!-- Sidebar Navidation Menus--><span class="heading">Opciones</span>
+                    <ul class="list-unstyled">
+                                <li>
+                            <a href="@Url.Action("Index","Home")">
+                                <i class="icon-home"></i>Inicio
+                            </a>
+                        </li>
+                        @if (!User.Identity.IsAuthenticated)
+                        {
+                            <li>
+                                <a href="@Url.Action("Login","Home")">
+                                    <i class="icon-home"></i>Iniciar Sesion
+                                </a>
+                            </li>
+
+                        }
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li>
+                                <a href="@Url.Action("Index","Zonas")">
+                                    <i class="icon-grid"></i>Zonas
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index","Repartidores")">
+                                    <i class="fa fa-child"></i>Repartidores
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index","Clientes")">
+                                    <i class="fa fa-address-book-o"></i>Clientes
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index","Itinerarios")">
+                                    <i class="fa fa-address-book-o"></i>Itinerarios
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse">
+                                    <i class="icon-interface-windows"></i>Orden de Entrega
+                                </a>
+                                <ul id="exampledropdownDropdown" class="collapse list-unstyled ">
+                                    <li><a href="@Url.Action("Index","OrdenesEntrega")">Listado de Ordenes</a></li>
+
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#exampledropdownDropdown2" aria-expanded="false" data-toggle="collapse">
+                                    <i class="fa fa-truck"></i>Monitoreo
+                                </a>
+                                <ul id="exampledropdownDropdown2" class="collapse list-unstyled ">
+                                    <li><a href="@Url.Action("EntregasPreview","Monitoreo")">Entregas</a></li>
+                                    <li><a href="@Url.Action("ZonasPreview","Monitoreo")">Mapeo de Zonas</a></li>
+                                    <li><a href="@Url.Action("Index","Monitoreo")">Zonas</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="login.html">
+                                    <i class="fa fa-500px"></i>Usuarios
+                                </a>
+                            </li>
+                        }
+
+
+
+
+                    </ul>
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <span class="heading">Reportes</span>
+                        <ul class="list-unstyled">
+                            <li>
+                                <a href="@Url.Action("ReporteCumplimiento","Reportes")">
+                                    <i class="fa fa-clock-o"></i>Reporte de Cumplimiento
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("ReporteMotivosNoEntrega","Reportes")">
+                                    <i class="fa fa-clock-o"></i>Reporte de Motivos de No Entrega
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("ReporteItinerario","Reportes")">
+                                    <i class="fa fa-clock-o"></i>Reporte de Marcaciones
+                                </a>
+                            </li>
+
+
+
+                        </ul>
+
+                    }
+
+                </nav>
+
+                <div class="content-inner">
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <header class="page-header">
+                            <div class="container-fluid">
+                                <h2 class="no-margin-bottom">Logistic Manager</h2>
+                            </div>
+                        </header>
+
+                    }
+
+
+
+                    <section class="dashboard-header">
+                        <div class="container-fluid">
+                            @RenderBody()
+                        </div>
+                    </section>
+
+                    <!-- Page Footer-->
+                    <footer class="main-footer">
+                        <div class="container-fluid">
+                            <div class="row">
+
+
+                                <div class="col-sm-6">
+                                    <p>ROGUR S.A. &copy; 2018-2019</p>
+                                </div>
+                                <div class="col-sm-6 text-right">
+                                    <p>Desarrollado por <a href="https://bootstrapious.com/admin-templates" class="external">Brayan Escalera Robles</a></p>
+                                    <!-- Please do not remove the backlink to us unless you support further theme's development at https://bootstrapious.com/donate. It is part of the license conditions. Thank you for understanding :)-->
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+        <!-- BEGIN # MODAL LOGIN -->
+        <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header" align="center" style="display: block">
+
+
+                        <div align="center">
+                            <img class="img-fluid rounded-circle" id="img_logo" src="~/Content/img/rogur.jpg">
+                        </div>
+
+
+                        <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </button>
+                    </div>
+
+
+                    <!-- Begin # DIV Form -->
+                    <div id="div-forms">
+
+                        <!-- Begin # Login Form -->
+                        <form id="login-form" method="post" action='@Url.Action("Login","Account")'>
+                            <div class="modal-body">
+                                <div id="div-login-msg">
+                                    <div id="icon-login-msg" class="glyphicon glyphicon-chevron-right"></div>
+                                    <span id="text-login-msg">Type your username and password.</span>
+                                </div>
+                                <input id="UserName" name="UserName" class="form-control" type="text" placeholder="Username (type ERROR for error effect)" required>
+                                <input id="Password" name="Password" class="form-control" type="password" placeholder="Password" required>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox"> Remember me
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div>
+
+                                    <button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>
+                                </div>
+                                <div>
+                                    <button id="login_lost_btn" type="button" class="btn btn-link">Lost Password?</button>
+                                    <button id="login_register_btn" type="button" class="btn btn-link">Register</button>
+                                </div>
+                            </div>
+                        </form>
+                        <!-- End # Login Form -->
+                        <!-- Begin | Lost Password Form -->
+                        <form id="lost-form" style="display:none;">
+                            <div class="modal-body">
+                                <div id="div-lost-msg">
+                                    <div id="icon-lost-msg" class="glyphicon glyphicon-chevron-right"></div>
+                                    <span id="text-lost-msg">Type your e-mail.</span>
+                                </div>
+                                <input id="lost_email" class="form-control" type="text" placeholder="E-Mail (type ERROR for error effect)" required>
+                            </div>
+                            <div class="modal-footer">
+                                <div>
+                                    <button type="submit" class="btn btn-primary btn-lg btn-block">Send</button>
+                                </div>
+                                <div>
+                                    <button id="lost_login_btn" type="button" class="btn btn-link">Log In</button>
+                                    <button id="lost_register_btn" type="button" class="btn btn-link">Register</button>
+                                </div>
+                            </div>
+                        </form>
+                        <!-- End | Lost Password Form -->
+                        <!-- Begin | Register Form -->
+                        <form id="register-form" style="display:none;">
+                            <div class="modal-body">
+                                <div id="div-register-msg">
+                                    <div id="icon-register-msg" class="glyphicon glyphicon-chevron-right"></div>
+                                    <span id="text-register-msg">Register an account.</span>
+                                </div>
+                                <input id="register_username" class="form-control" type="text" placeholder="Username (type ERROR for error effect)" required>
+                                <input id="register_email" class="form-control" type="text" placeholder="E-Mail" required>
+                                <input id="register_password" class="form-control" type="password" placeholder="Password" required>
+                            </div>
+                            <div class="modal-footer">
+                                <div>
+                                    <button type="submit" class="btn btn-primary btn-lg btn-block">Register</button>
+                                </div>
+                                <div>
+                                    <button id="register_login_btn" type="button" class="btn btn-link">Log In</button>
+                                    <button id="register_lost_btn" type="button" class="btn btn-link">Lost Password?</button>
+                                </div>
+                            </div>
+                        </form>
+                        <!-- End | Register Form -->
+
+                    </div>
+                    <!-- End # DIV Form -->
+
+                </div>
+            </div>
+        </div>
+        <!-- END # MODAL LOGIN -->
+        <!--Javascript Files-->
+
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBK2dtqBK4ZsR1ybBGUJzVwpCMFUrFQdD4&libraries=drawing&callback=initMap"
+                async defer></script>
+
+
+
+        <script src="~/Content/vendor/popper.js/popper.min.js"></script>
+        <script src="~/Content/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+        <script src="~/Content/vendor/jquery.cookie/jquery.cookie.js"></script>
+        <script src="~/Content/vendor/chart.js/Chart.min.js"></script>
+        <script src="~/Content/vendor/jquery-validation/jquery.validate.min.js"></script>
+        <script src="~/Content/charts-home.js"></script>
+        <script src="~/Content/front.js"></script>
+
+
+
+
+    </body>
+    </html>*@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Mi aplicación ASP.NET</title>
+
+
+
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/moment")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/signalr")
+    <script src="http://localhost:5757/signalr/hubs"></script>
+
+
+
+
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700" />
+    <link rel="stylesheet" href="~/Content/css/style.default.css" id="theme-stylesheet">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="~/Content/css/custom.css">
+</head>
+<body>
+
+    <div class="page">
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <header class="header">
+                <nav class="navbar">
+
+                    <!-- Search Box-->
+                    @*<div class="search-box">
+                            <button class="dismiss"><i class="icon-close"></i></button>
+                            <form id="searchForm" action="#" role="search">
+                                <input type="search" placeholder="What are you looking for..." class="form-control">
+                            </form>
+                        </div>*@
+
+                    <div class="container-fluid">
+                        <div class="navbar-holder d-flex align-items-center justify-content-between">
+                            <!-- Navbar Header-->
+                            <div class="navbar-header">
+                                <!-- Navbar Brand --><a href="@Url.Action("Index","Home")" class="navbar-brand">
+                                    <div class="brand-text brand-big"><span>Roghur </span><strong>S.A</strong></div>
+                                    <div class="brand-text brand-small"><strong>Roghur</strong></div>
+                                </a>
+                                <!-- Toggle Button--><a id="toggle-btn" href="#" class="menu-btn active"><span></span><span></span><span></span></a>
+                            </div>
+                            <!-- Navbar Menu -->
+                            <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+                                <!-- Search-->
+                                @*<li class="nav-item d-flex align-items-center"><a id="search" href="#"><i class="icon-search"></i></a></li>*@
+
+                                <!-- Notifications-->
+                                <!-- Messages                        -->
+                                <!-- Languages dropdown    -->
+                                <!-- Logout    -->
+
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("Logout","Account")" class="nav-link logout">
+                                            Cerrar Sesion
+                                            <i class="fa fa-sign-out"></i>
+                                        </a>
+                                    </li>
+
+                                }
+                                @if (!User.Identity.IsAuthenticated)
+                                {
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link" data-toggle="modal" data-target="#login-modal">
+                                            Iniciar Sesion
+                                        </a>
+                                    </li>
+
+                                }
+
+
+
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </header>
+
+        }
+
+
+        <div class="page-content d-flex align-items-stretch">
+
+
+            <nav class="side-navbar">
+                <!-- Sidebar Header-->
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="sidebar-header d-flex align-items-center">
+                        <div class="avatar"><img src="~/Content/img/rogur.jpg" alt="..." class="img-fluid rounded-circle"></div>
+                        <div class="title">
+
+                            <h1 class="h4">@User.Identity.Name</h1>
+                            <p>Encargado de Logistica</p>
+                        </div>
+                    </div>
+                }
+
+
+                <!-- Sidebar Navidation Menus--><span class="heading">Opciones</span>
+                <ul class="list-unstyled">
+                    @*<li><a href="index.html"> <i class="icon-home"></i>Inicio</a></li>*@
+
+                    @*<li @ViewBag.Home>              <a href="@Url.Action("Index","Home")">          <i class="icon-home"></i>Inicio</a></li@View>
+                        <li @ViewBag.Zona>             <a href="@Url.Action("Index","Zonas")">         <i class="icon-grid"></i>Zonas </a></li@ViewBag.Zona>
+                        <li @ViewBag.Repartidores>      <a href="@Url.Action("Index","Repartidores")">  <i class="fa fa-child"></i>Repartidores </a></li>
+                        <li @ViewBag.Clientes>          <a href="@Url.Action("Index","Clientes")">      <i class=" fa fa-address-book-o"></i>Clientes </a></li@ViewBag.Home>
+                        <li @ViewBag.Itinerarios>       <a href="@Url.Action("Index","Itinerarios")">   <i class=" fa fa-address-book-o"></i>Itinerarios </a></li@ViewBag.Home>*@
+
+                    <li>
+                        <a href="@Url.Action("Index","Home")">
+                            <i class="icon-home"></i>Inicio
+                        </a>
+                    </li>
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <li>
+                            <a href="@Url.Action("Login","Home")">
+                                <i class="icon-home"></i>Iniciar Sesion
+                            </a>
+                        </li>
+
+                    }
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li>
+                            <a href="#zonasdropdown" aria-expanded="false" data-toggle="collapse">
+                                <i class="icon-grid"></i>Zonas
+                            </a>
+                            <ul id="zonasdropdown" class="collapse list-unstyled ">
+                                <li>
+                                    <a href="@Url.Action("AddorEdit", "Zonas", new { id = 0 })">
+                                        Agregar Zona
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Index","Zonas")">
+                                        Listado de Zonas
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#repartidoresdropdrown" aria-expanded="false" data-toggle="collapse">
+                                <i class="fa fa-child"></i>Repartidores
+                            </a>
+                            <ul id="repartidoresdropdrown" class="collapse list-unstyled ">
+                                <li>
+                                    <a href="@Url.Action("AddorEdit", "Repartidores", new { id = 0 })">
+                                        Agregar Repartidor
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Index","Repartidores")">
+                                        Listado de Repartidores
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#encargadosdropdrown" aria-expanded="false" data-toggle="collapse">
+                                <i class="fa fa-users"></i>Encargados Logísticos
+                            </a>
+                            <ul id="encargadosdropdrown" class="collapse list-unstyled ">
+                                <li>
+                                    <a href="@Url.Action("AddorEdit", "EncargadosLogistica", new { id = 0 })">
+                                        Agregar Encargado de Logística
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Index", "EncargadosLogistica")">
+                                        Listado de Encargados de Logística
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#clientesdropdrown" aria-expanded="false" data-toggle="collapse">
+                                <i class="fa fa-address-book-o"></i>Clientes
+                            </a>
+                            <ul id="clientesdropdrown" class="collapse list-unstyled ">
+                                <li>
+                                    <a href="@Url.Action("ClientePersonaAddorEdit", "Clientes", new { id = 0 })">
+                                        Agregar Cliente
+                                    </a>
+                                <li>
+                                    <a href="@Url.Action("ClientesPersonas","Clientes")">
+                                        Listado de Clientes
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#itinerariosdropdrown" aria-expanded="false" data-toggle="collapse">
+                                <i class="fa fa-book"></i>Itinerarios
+                            </a>
+                            <ul id="itinerariosdropdrown" class="collapse list-unstyled ">
+                                <li>
+                                    <a href="@Url.Action("AddorEdit", "Itinerarios", new { id = 0 })">
+                                        Agregar Itinerario
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Index","Itinerarios")">
+                                        Listado de Itinerarios
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#entregasDropdown" aria-expanded="false" data-toggle="collapse">
+                                <i class="icon-interface-windows"></i>Ordenes de Entrega
+                            </a>
+                            <ul id="entregasDropdown" class="collapse list-unstyled ">
+                                <li>
+                                    <a href="@Url.Action("AddorEdit", "OrdenesEntrega", new { id = 0 })">
+                                        Agregar Orden de Entrega
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Index","OrdenesEntrega")">
+                                        Listado de Ordenes de Entrega
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        @*<li>
+                            <a href="#exampledropdownDropdown2" aria-expanded="false" data-toggle="collapse">
+                                <i class="fa fa-truck"></i>Monitoreo
+                            </a>
+                            <ul id="exampledropdownDropdown2" class="collapse list-unstyled ">
+                                <li><a href="@Url.Action("EntregasPreview","Monitoreo")">Entregas</a></li>
+                                <li><a href="@Url.Action("ZonasPreview","Monitoreo")">Mapeo de Zonas</a></li>
+                                <li><a href="@Url.Action("Index","Monitoreo")">Zonas</a></li>
+                            </ul>
+                        </li>*@
+                        <li>
+                            <a href="@Url.Action("Index","Usuarios")">
+                                <i class="fa fa-500px"></i>Usuarios
+                            </a>
+                        </li>
+                    }
+
+
+
+
+                </ul>
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <span class="heading">Reportes</span>
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="@Url.Action("ReporteCumplimiento","Reportes")">
+                                <i class="fa fa-clock-o"></i>Reporte de Cumplimiento
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("ReporteMotivosNoEntrega","Reportes")">
+                                <i class="fa fa-clock-o"></i>Reporte de Motivos de No Entrega
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("ReporteEstadoEntregas","Reportes")">
+                                <i class="fa fa-clock-o"></i>Reporte Estado de Entregas
+                            </a>
+                        </li>
+
+
+
+                    </ul>
+
+                }
+
+            </nav>
+
+            <div class="content-inner">
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <header class="page-header">
+                        <div class="container-fluid">
+                            <h2 class="no-margin-bottom">Encargado Logistico</h2>
+                        </div>
+                    </header>
+
+                }
+
+
+
+                <section class="dashboard-header">
+                    <div class="container-fluid">
+                        @RenderBody()
+                    </div>
+                </section>
+
+                <!-- Page Footer-->
+                <footer class="main-footer">
+                    <div class="container-fluid">
+                        <div class="row">
+
+
+                            <div class="col-sm-6">
+                                <p>ROGUR S.A. &copy; 2019</p>
+                            </div>
+                            <div class="col-sm-6 text-right">
+                                <p>Desarrollado por <a href="https://bootstrapious.com/admin-templates" class="external">Brayan Escalera Robles</a></p>
+                                <!-- Please do not remove the backlink to us unless you support further theme's development at https://bootstrapious.com/donate. It is part of the license conditions. Thank you for understanding :)-->
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+    <!-- BEGIN # MODAL LOGIN -->
+    <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" align="center" style="display: block">
+
+
+                    <div align="center">
+                        <img class="img-fluid rounded-circle" id="img_logo" src="~/Content/img/rogur.jpg">
+                    </div>
+                    @*<div class="avatar"><img src="~/Content/img/rogur.jpg" alt="..." class="img-fluid rounded-circle"></div>*@
+
+
+                    <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    </button>
+                </div>
+
+
+                <!-- Begin # DIV Form -->
+                <div id="div-forms">
+
+                    <!-- Begin # Login Form -->
+                    <form id="login-form" method="post" action='@Url.Action("Login","Account")'>
+                        <div class="modal-body">
+                            <div id="div-login-msg">
+                                <div id="icon-login-msg" class="glyphicon glyphicon-chevron-right"></div>
+                                <span id="text-login-msg">Type your username and password.</span>
+                            </div>
+                            <input id="UserName" name="UserName" class="form-control" type="text" placeholder="Username (type ERROR for error effect)" required>
+                            <input id="Password" name="Password" class="form-control" type="password" placeholder="Password" required>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox"> Remember me
+                                </label>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div>
+
+                                <button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>
+                            </div>
+                            <div>
+                                <button id="login_lost_btn" type="button" class="btn btn-link">Lost Password?</button>
+                                <button id="login_register_btn" type="button" class="btn btn-link">Register</button>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- End # Login Form -->
+                    <!-- Begin | Lost Password Form -->
+                    <form id="lost-form" style="display:none;">
+                        <div class="modal-body">
+                            <div id="div-lost-msg">
+                                <div id="icon-lost-msg" class="glyphicon glyphicon-chevron-right"></div>
+                                <span id="text-lost-msg">Type your e-mail.</span>
+                            </div>
+                            <input id="lost_email" class="form-control" type="text" placeholder="E-Mail (type ERROR for error effect)" required>
+                        </div>
+                        <div class="modal-footer">
+                            <div>
+                                <button type="submit" class="btn btn-primary btn-lg btn-block">Send</button>
+                            </div>
+                            <div>
+                                <button id="lost_login_btn" type="button" class="btn btn-link">Log In</button>
+                                <button id="lost_register_btn" type="button" class="btn btn-link">Register</button>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- End | Lost Password Form -->
+                    <!-- Begin | Register Form -->
+                    <form id="register-form" style="display:none;">
+                        <div class="modal-body">
+                            <div id="div-register-msg">
+                                <div id="icon-register-msg" class="glyphicon glyphicon-chevron-right"></div>
+                                <span id="text-register-msg">Register an account.</span>
+                            </div>
+                            <input id="register_username" class="form-control" type="text" placeholder="Username (type ERROR for error effect)" required>
+                            <input id="register_email" class="form-control" type="text" placeholder="E-Mail" required>
+                            <input id="register_password" class="form-control" type="password" placeholder="Password" required>
+                        </div>
+                        <div class="modal-footer">
+                            <div>
+                                <button type="submit" class="btn btn-primary btn-lg btn-block">Register</button>
+                            </div>
+                            <div>
+                                <button id="register_login_btn" type="button" class="btn btn-link">Log In</button>
+                                <button id="register_lost_btn" type="button" class="btn btn-link">Lost Password?</button>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- End | Register Form -->
+
+                </div>
+                <!-- End # DIV Form -->
+
+            </div>
+        </div>
+    </div>
+    <!-- END # MODAL LOGIN -->
+
+
+
+    <script src="~/Content/vendor/chart.js/Chart.min.js"></script>
+    <script src="~/Content/js/charts-home.js"></script>
+    <script src="~/Content/js/front.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+

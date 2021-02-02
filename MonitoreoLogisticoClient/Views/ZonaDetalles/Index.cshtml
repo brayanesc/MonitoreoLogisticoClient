@@ -1,0 +1,44 @@
+﻿@model IEnumerable<MonitoreoLogisticoClient.Models.ZonaDetalle>
+
+@{
+    ViewBag.Title = "Zona Detalles";
+}
+
+<h2>Listado de Zonas Detalle</h2>
+
+<p>
+    @Html.ActionLink("Create New", "AddorEdit")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Latitud)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Longitud)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ZonaId)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Latitud)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Longitud)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ZonaId)
+        </td>
+        <td>
+            @Html.ActionLink("Modificar", "AddorEdit", new { id=item.Id }) |
+            @Html.ActionLink("Eliminar", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

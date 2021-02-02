@@ -1,0 +1,156 @@
+﻿@model IEnumerable<MonitoreoLogisticoClient.Models.Dtos.ClientePersona_dto>
+
+@{
+    ViewBag.Title = "ClientesPersonas";
+}
+
+<h2>ClientesPersonas</h2>
+
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBK2dtqBK4ZsR1ybBGUJzVwpCMFUrFQdD4&libraries=drawing&callback=initMap"
+        async defer></script>
+<script type="text/javascript">
+    var markers = @Html.Raw(Json.Encode(ViewBag.Marcadores));
+    function initMap() {
+
+        var mapOptions = {
+            center: { lat: -17.78218, lng: -63.17472 },
+            zoom: 14
+        }
+        var infoWindow = new google.maps.InfoWindow();
+        var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+        for (var i = 0; i < markers.length; i++) {
+            var data = markers[i]
+            var latlng = new google.maps.LatLng(data.Latitud, data.Longitud);
+
+            var marker = new google.maps.Marker({
+                position: latlng,
+                map: map,
+                title: data.Nombre
+            });
+
+            (function (marker, data) {
+                google.maps.event.addListener(marker, "click", function(e) {
+                    infoWindow.setContent(data.Descripcion);
+                    infoWindow.open(map, marker);
+                });
+            })(marker,data);
+        }
+    }
+
+</script>
+
+
+
+<p>
+    @Html.ActionLink("Agregar Cliente", "ClientePersonaAddorEdit")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.NombreCompleto)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Telefono)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CI)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Ocupacion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaNacimiento)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Edad)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Sexo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Latitud)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Longitud)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NombreCompleto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Telefono)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CI)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ocupacion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaNacimiento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Edad)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sexo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descripcion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Latitud)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Longitud)
+            </td>
+            <td>
+                @Html.ActionLink("Modificar", "ClientePersonaAddorEdit", new { id = item.Id }) |
+                @Html.ActionLink("Eliminar", "ClientePersonaDelete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>
+
+
+<div id="map" style="height: 500px"></div>
+
+<script type="text/javascript">
+    $(function () {
+        if (window.jQuery) {
+            $.connection.hub.url = 'http://localhost:5757/signalr';
+            var hub = $.connection.hubPrueba;
+            console.log(hub);
+            //alert(hub);
+
+            hub.client.send = function (a) {
+                console.log(a);
+                //alert(a);
+            };
+
+            $.connection.hub.start().done(function () {
+                hub.server.send("algo");
+            }).fail(function () {
+                //alert("Connection failed");
+            });
+        }
+
+    });
+</script>

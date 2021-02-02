@@ -1,0 +1,51 @@
+﻿@model IEnumerable<MonitoreoLogisticoClient.Models.MarcacionEntrega>
+
+@{
+    ViewBag.Title = "Marcaciones Entrega";
+}
+
+<h2>Listado de Marcaciones Entrega</h2>
+
+<p>
+    @Html.ActionLink("Create New", "AddorEdit")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Hora)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Latitud)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Longitud)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrdenEntregaId)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Hora)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Latitud)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Longitud)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrdenEntregaId)
+        </td>
+        <td>
+            @Html.ActionLink("Modificar", "AddorEdit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Eliminar", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

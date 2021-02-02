@@ -1,0 +1,37 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+@if (@User.Identity.IsAuthenticated)
+{
+    <h1>Bienvenido @User.Identity.Name</h1>
+
+}
+
+<div class="jumbotron">
+    <h1>Historia</h1>
+    <p>
+        Roghur S.A. nace un 21 de marzo de 1971, se inicio con un pequeño salón de ventas, con el tiempo se extendió a lo largo del país teniendo presencia en la mayoría de los departamentos, con el propósito de brindar una cobertura total, comodidad y un mejor servicio a sus clientes.
+
+        Contamos con más de 18.000 productos a disposición de los clientes, procedentes de  diferentes partes del mundo como: EE.UU, Alemania, España, China, Brasil, etc. Si bien el crecimiento y la variedad de productos ha sido importante, la innovación en tecnología de punta, hacen de los productos de Roghur, la más amplia gama confiable del mercado.
+
+        El éxito también proviene de otros valores duraderos: el progreso constante para mejorar la calidad de los productos y servicios que ofrece; un respeto por el medio ambiente y la determinación de asegurar que nuestros productos no lo afecten; una promesa de ser dignos de confianza en todas nuestras actividades; y la realización de los mayores esfuerzos comerciales para el beneficio mutuo de todas las partes involucradas.
+
+        Somos un verdadero Centro de Ventas de equipos de primera calidad, de fabricantes de prestigio mundial indiscutido.
+
+        Como lideres en bombas de agua con un permanente stock de prestigiosas marcas de Estados Unidos de Norteamérica, Alemania, Italia, España, Japón, Brasil, etc.
+
+        Para atender a nuestros clientes disponemos de un servicio técnico, contando con un gran taller de mantenimiento y reparación que garantizan la inversión del cliente.
+    </p>
+</div>
+
+<div class="row">
+
+    <div class="col-md-6">
+        <h2>Mision</h2>
+        <p>Somos una empresa que ofrece productos innovadores y confiable, una excelente distribución y cultiva una relación de confianza con sus clientes logrando una experiencia agradable de compra.</p>
+    </div>
+    <div class="col-md-6">
+        <h2>Vision</h2>
+        <p>Ser una empresa líder en provisión de productos para el hogar y el sector productivo, reconocidos por productos innovadores, alto grado de confianza en sus clientes y expertos en distribución.</p>
+    </div>
+</div>

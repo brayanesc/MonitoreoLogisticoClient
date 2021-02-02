@@ -1,0 +1,229 @@
+﻿@model MonitoreoLogisticoClient.Models.Cliente
+
+@{
+    ViewBag.Title = "AddorEdit";
+}
+
+<style>
+    #map {
+        height: 500px;
+    }
+</style>
+
+<script type="text/javascript">
+    function initMap() {
+        geocoder = new google.maps.Geocoder();
+        var polygonArray = [];
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: {
+                lat: -17.78218
+                , lng: -63.17472
+            }
+            , zoom: 12, //disableDefaultUI: true
+        });
+        //var drawingManager = new google.maps.drawing.DrawingManager({
+        //    drawingMode: google.maps.drawing.OverlayType.MARKER
+        //    , drawingControl: true
+        //    , drawingControlOptions: {
+        //        position: google.maps.ControlPosition.TOP_CENTER
+        //        , drawingModes: ['marker', 'circle', 'polygon', 'polyline', 'rectangle']
+        //    }
+        //    , markerOptions: {
+        //        //icon: 'https://png.icons8.com/metro/1600/car.png'
+        //    }
+        //    , polygonOptions: {
+        //        fillColor: '#1a1aff'
+        //        , clickable: true
+        //        , fillOpacity: 0.5
+        //        , editable: true
+        //        , clickable: true
+        //        , draggable: true
+        //    }
+        //    , circleOptions: {
+        //        fillColor: '#ffff00'
+        //        , fillOpacity: 1
+        //        , strokeWeight: 5
+        //        , clickable: true
+        //        , editable: true
+        //        , zIndex: 1
+        //    }
+        //});
+        //drawingManager.setMap(map);
+        //google.maps.event.addListener(drawingManager, 'polygoncomplete', function (polygon) {
+        //    document.getElementById('info').innerHTML += "polygon points:" + "<br>";
+        //    for (var i = 0; i < polygon.getPath().getLength() ; i++) {
+        //        document.getElementById('info').innerHTML += polygon.getPath().getAt(i).toUrlValue(6) + "<br>";
+        //    }
+        //    polygonArray.push(polygon);
+        //    polygon.addListener('click', function () {
+        //        console.log("se hizo click sobre polygono");
+        //    });
+        //});
+
+
+
+        @*$.ajax({
+            type: "GET"
+            , url: '@Url.Action("MapData", "Clientes")'
+            , dataType: 'json'
+            , contentType: 'application/x-www-form-urlencoded'
+            , success: function (data) {
+                console.log("entro", data);
+                $.each(data, function (i, item) {
+                    console.log("item", item);
+                    var marker = new google.maps.Marker({
+                        'position': new google.maps.LatLng(item.Latitud, item.Longitud)
+                        , 'map': map
+                        , 'title': item.Nombre
+                    });
+
+                    var contentString = '<div id="content">' +
+                        '<div id="siteNotice">' +
+                            '</div>' +
+                            '<h3 id="firstHeading" class="firstHeading">' + item.Nombre + '</h3>' +
+                            '<div id="bodyContent">' + item.Latitud + " " + item.Longitud +
+                            '</div>' +
+                        '</div>';
+
+
+                    google.maps.event.addListener(marker, 'click', function () {
+                        var infowindow = new google.maps.InfoWindow({
+                            content: contentString
+                        });
+                        infowindow.open(map, marker);
+                    });
+
+                    console.log("entro2", data);
+                });
+            }
+        }).done(function () {
+            $(".loadingOverlay").hide();
+        });*@
+    }
+
+    //function showArrays(event) {
+    //    var vertices = this.getPath();
+
+    //    var contentString = event.latLng.lat() + ' , ' + event.latLng.lng();
+    //    console.log("Event: ", event);
+
+
+
+    //}
+
+
+
+</script>
+
+
+<h2>Cliente</h2>
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-horizontal">
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.Id)
+                @*<div class="form-group">
+                    @Html.LabelFor(model => model.codigoCliente, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.codigoCliente, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.codigoCliente, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ApellidoPaterno, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.ApellidoPaterno, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ApellidoPaterno, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ApellidoMaterno, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.ApellidoMaterno, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ApellidoMaterno, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CI, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.CI, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.CI, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                @*<div class="form-group">
+                    @Html.LabelFor(model => model.longitudCliente, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.longitudCliente, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.longitudCliente, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.latitudCliente, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.latitudCliente, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.latitudCliente, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Celular, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Celular, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Celular, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.UbicacionId, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.UbicacionId, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.UbicacionId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Guardar Cambios" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-6">
+            <hr />
+            <div id="map"></div>
+        </div>
+
+
+    </div>
+
+}
+
+<div>
+    @Html.ActionLink("Volver a Listado de Clientes", "Index")
+</div>
+
+@*@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}*@

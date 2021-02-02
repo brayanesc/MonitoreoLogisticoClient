@@ -1,0 +1,56 @@
+﻿@model MonitoreoLogisticoClient.Models.DetalleItinerario
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Esta seguro que desea eliminar este registro?</h3>
+<div>
+    <h4>DetalleItinerario</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Fecha)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Fecha)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Salida)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Salida)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Llegada)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Llegada)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ItinerarioId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ItinerarioId)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Volver a Listado", "Index")
+        </div>
+    }
+</div>

@@ -1,0 +1,99 @@
+﻿@model IEnumerable<MonitoreoLogisticoClient.Models.Reportes.ReporteCumplimiento>
+
+@{
+    ViewBag.Title = "ReporteCumplimiento";
+}
+
+<h2>Reporte de Cumplimiento</h2>
+
+
+<form class="form-horizontal" enctype="application/x-www-form-urlencoded">
+
+    <div class="form-group">
+        <div class="control-label col-md-2">
+         Codigo de Repartidor</div>
+        <div class="col-md-10">
+            @Html.DropDownList("r", new SelectList(ViewBag.RepartidoresListItems, "Id", "NombreCompleto"),"Seleccionar Repartidor")
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="control-label col-md-2">
+            Codigo de Itinerario
+        </div>
+        <div class="col-md-10">
+            @Html.DropDownList("i", Enumerable.Empty<SelectListItem>(), "Seleccionar Itinerario")
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-2">
+            <input type="submit" value="Aceptar" class="btn btn-default" />
+        </div>
+    </div>
+
+</form>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CodigoCliente)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Factura)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NombreCliente)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Estado)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Itinerario)
+        </th>
+    </tr>
+
+    @foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.CodigoCliente)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Factura)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NombreCliente)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Estado)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Itinerario)
+        </td>
+    </tr>
+}
+
+</table>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script type="text/javascript">
+    $(function () {
+        $("#r").change(function () {
+            console.log("entro a metodo");
+            var val = $(this).val();
+            var subItems="";
+            $.getJSON("@Url.Action("ObtenerItinerarios", "Reportes")", { repartidorId: val }, function (data) {
+                console.log("data this:",data);
+              $.each(data,function(index,item){
+                  subItems += "<option value='" + item.Id + "'>" + item.Descripcion + "</option>"
+              });
+              $("#i").html(subItems)
+            });
+        });
+    });
+</script>

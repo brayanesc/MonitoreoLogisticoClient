@@ -1,0 +1,193 @@
+﻿
+@{
+    ViewBag.Title = "Monitoreo";
+}
+
+<h2>Monitoreo</h2>
+
+
+<style>
+    #map {
+        height: 500px;
+    }
+</style>
+
+<script>
+    var test = [];
+    var zonificacion = [];
+    var coordinates = [];
+
+    var polygonArray = [];
+    
+
+    var infoWindow;
+    var map;
+
+        function initMap() {
+
+
+
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: -17.78218, lng: -63.17472 },
+                zoom: 14,
+                //disableDefaultUI: true
+            });
+
+
+
+            var drawingManager = new google.maps.drawing.DrawingManager({
+                drawingMode: google.maps.drawing.OverlayType.MARKER,
+                drawingControl: true,
+
+
+                drawingControlOptions: {
+                    position: google.maps.ControlPosition.TOP_CENTER,
+                    drawingModes: ['marker', 'circle', 'polygon', 'polyline', 'rectangle']
+                },
+                markerOptions: {
+                    //icon: 'https://png.icons8.com/metro/1600/car.png'
+                },
+                polygonOptions:{
+                    fillColor: '#1a1aff',
+                    clickable: true,
+                    fillOpacity: 0.5,
+                    editable: true,
+                    clickable: true,
+                    draggable: true
+                },
+
+                circleOptions: {
+                    fillColor: '#ffff00',
+                    fillOpacity: 1,
+                    strokeWeight: 5,
+                    clickable: true,
+                    editable: true,
+                    zIndex: 1
+                }
+            });
+            drawingManager.setMap(map);
+
+
+
+
+            google.maps.event.addListener(drawingManager, 'polygoncomplete',
+                function (polygon) {
+
+                    var nombre = prompt("Ingrese Nombre de la Zona", "");
+                    
+                    var bodyrequest = {};
+                    var geoelement = []
+
+                    document.getElementById('info').innerHTML += "polygon points:" + "<br>";
+                    for (var i = 0; i < polygon.getPath().getLength() ; i++) {
+
+                        document.getElementById('info').innerHTML += polygon.getPath().getAt(i).toUrlValue(6) + "<br>";
+                        coordinates.push({
+                            lat: polygon.getPath().getAt(i).lat(),
+                            lng: polygon.getPath().getAt(i).lng()
+                        });
+
+                        geoelement.push({
+                            lat: polygon.getPath().getAt(i).lat(),
+                            lng: polygon.getPath().getAt(i).lng()
+                        });
+                    }
+                    
+                    console.log("GEOELEMENT", geoelement);
+
+                    bodyrequest.Nombre = nombre;
+                    //bodyrequest.Coordenadas = coordinates;
+                    bodyrequest.Coordenadas = geoelement;
+                    console.log("BODYREQUEST", bodyrequest);
+
+                    zonificacion.push(bodyrequest);
+                    test.push(bodyrequest);
+
+
+
+                    //bodyrequest.Nombre = "NombreZona";
+                    //bodyrequest.Coordenadas = coordinates;
+                    //zonificacion.push(bodyrequest);
+
+                    polygonArray.push(polygon);
+
+                    polygon.addListener('click', showInfo);
+
+                    infoWindow = new google.maps.InfoWindow({
+                        content: '<div id="nombre" contentEditable="true">changeme...</div>'
+                    });
+
+                    //polygon.addListener('click', function () {
+                    //    console.log("se hizo click sobre polygono");
+                    //});
+
+            });
+
+
+
+
+        }
+
+        function showInfo(event) {
+            var vertices = this.getPath();
+            var contentString = "";
+
+            for (var i = 0; i < vertices.getLength() ; i++) {
+                var xy = vertices.getAt(i);
+                contentString += '<br>' + 'Coordinate ' + i + ':<br>' + xy.lat() + ',' +
+                    xy.lng();
+            }
+
+            //infoWindow.setContent(contentString);
+            infoWindow.setPosition(event.latLng);
+
+            infoWindow.open(map);
+        }
+
+        function showArrays()
+        {
+            //console.log("BodyRequest: ", bodyrequest);
+            console.log("Zonificacion: ", { zonificacion: test });
+            var estacosa = JSON.stringify({ zonificacion: test},null,"  ");
+            console.log("ESTO", estacosa);
+            //console.log("Test", JSON.parse(test));
+            //console.log("JSONZONIFICACION: ", JSON.stringify(zonificacion));
+            //console.log("Coordinates", coordinates);
+            //console.log("CoordinatesJson", JSON.stringify(coordinates));
+            //jsonString = JSON.stringify(polygonArray[0].getPath().getArray());
+            //console.log("PolyArray", polygonArray);
+            //console.log("Elemento", JSON.stringify(polygonArray[0].getPath().getArray()));
+            console.log("datos", zonificacion);
+            $.ajax({
+                url: '@Url.Action("Polygonos", "Monitoreo")',
+                type: "POST",
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({ zonificacion: test }, null, "  "),
+                success: function (d)
+                {
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                }
+            });
+
+            //console.log("JSON", jsonString);
+            //var vertices = this.getPath();
+
+            //var contentString = event.latLng.lat() + ' , ' + event.latLng.lng();
+            //console.log("Event: ", event);
+
+
+
+        }
+
+
+
+
+
+</script>
+<div id="map"></div>
+<input type="button" onclick="showArrays()" value="Hola">
+<div id="info"></div>
+
+

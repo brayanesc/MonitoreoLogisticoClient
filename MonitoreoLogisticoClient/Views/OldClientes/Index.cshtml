@@ -1,0 +1,204 @@
+﻿@model IEnumerable<MonitoreoLogisticoClient.Models.Cliente>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<style>
+    #map {
+        height: 500px;
+    }
+</style>
+
+
+<script src="~/Scripts/jquery.signalR-2.2.3.min.js"></script>
+<script src="http://localhost:5757/signalr/hubs"></script>
+
+<script type="text/javascript">
+    function initMap() {
+        geocoder = new google.maps.Geocoder();
+        var polygonArray = [];
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: {
+                lat: -17.78218
+                , lng: -63.17472
+            }
+            , zoom: 14, //disableDefaultUI: true
+        });
+        //var drawingManager = new google.maps.drawing.DrawingManager({
+        //    drawingMode: google.maps.drawing.OverlayType.MARKER
+        //    , drawingControl: true
+        //    , drawingControlOptions: {
+        //        position: google.maps.ControlPosition.TOP_CENTER
+        //        , drawingModes: ['marker', 'circle', 'polygon', 'polyline', 'rectangle']
+        //    }
+        //    , markerOptions: {
+        //        //icon: 'https://png.icons8.com/metro/1600/car.png'
+        //    }
+        //    , polygonOptions: {
+        //        fillColor: '#1a1aff'
+        //        , clickable: true
+        //        , fillOpacity: 0.5
+        //        , editable: true
+        //        , clickable: true
+        //        , draggable: true
+        //    }
+        //    , circleOptions: {
+        //        fillColor: '#ffff00'
+        //        , fillOpacity: 1
+        //        , strokeWeight: 5
+        //        , clickable: true
+        //        , editable: true
+        //        , zIndex: 1
+        //    }
+        //});
+        //drawingManager.setMap(map);
+        //google.maps.event.addListener(drawingManager, 'polygoncomplete', function (polygon) {
+        //    document.getElementById('info').innerHTML += "polygon points:" + "<br>";
+        //    for (var i = 0; i < polygon.getPath().getLength() ; i++) {
+        //        document.getElementById('info').innerHTML += polygon.getPath().getAt(i).toUrlValue(6) + "<br>";
+        //    }
+        //    polygonArray.push(polygon);
+        //    polygon.addListener('click', function () {
+        //        console.log("se hizo click sobre polygono");
+        //    });
+        //});
+
+
+
+        $.ajax({
+            type: "GET"
+            , url: '@Url.Action("MapData", "Clientes")'
+            , dataType: 'json'
+            , contentType: 'application/x-www-form-urlencoded'
+            , success: function (data) {
+                console.log("entro", data);
+                $.each(data, function (i, item) {
+                    console.log("item", item);
+                    var marker = new google.maps.Marker({
+                        'position': new google.maps.LatLng(item.Latitud, item.Longitud)
+                        , 'map': map
+                        , 'title': item.Nombre
+                    });
+
+                    var contentString = '<div id="content">' +
+                        '<div id="siteNotice">' +
+                            '</div>' +
+                            '<h3 id="firstHeading" class="firstHeading">' + item.Nombre + '</h3>' +
+                            '<div id="bodyContent">' + item.Latitud + " " + item.Longitud +
+                            '</div>' +
+                        '</div>';
+
+
+                    google.maps.event.addListener(marker, 'click', function () {
+                        var infowindow = new google.maps.InfoWindow({
+                            content: contentString
+                        });
+                        infowindow.open(map, marker);
+                    });
+
+                    console.log("entro2", data);
+                });
+            }
+        }).done(function () {
+            $(".loadingOverlay").hide();
+        });
+    }
+
+    //function showArrays(event) {
+    //    var vertices = this.getPath();
+
+    //    var contentString = event.latLng.lat() + ' , ' + event.latLng.lng();
+    //    console.log("Event: ", event);
+
+
+
+    //}
+
+
+
+</script>
+<script>
+        $(function () {
+            if (window.jQuery) {
+                $.connection.hub.url = 'http://localhost:5757/signalr';
+                var chat = $.connection.hubPrueba;
+                chat.client.actualizar = function (a) {
+                    console.log(a);
+                };
+
+                //alert(chat);
+                $.connection.hub.start().done(function () {
+                    chat.server.send("algo");
+                }).fail(function () {
+                    //alert("Connection failed");
+                });
+            }
+
+        });
+</script>
+
+
+
+
+<h2>Listado de Clientes</h2>
+
+<p>
+    @Html.ActionLink("Agregar Nuevo Cliente", "AddorEdit")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NombreCompleto)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Telefono)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UbicacionId)
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.ciCliente)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.celularCliente)
+        </th>*@
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NombreCompleto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Telefono)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UbicacionId)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.celularCliente)
+            </td>*@
+            <td>
+                @Html.ActionLink("Modificar", "AddorEdit", new { id=item.Id }) |
+                @Html.ActionLink("Eliminar", "Delete", new { id=item.Id })
+
+                @*@Html.ActionLink("Modificar", "Modificar", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |*@
+
+            </td>
+        </tr>
+    }
+
+</table>
+<div id="map"></div>
+<div id="info"></div>

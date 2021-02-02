@@ -1,0 +1,73 @@
+﻿@model IEnumerable<MonitoreoLogisticoClient.Models.Dtos.Itinerario_dto>
+
+@{
+    ViewBag.Title = "Listado de Itinerarios";
+}
+
+<h2>Listado de Itinerarios</h2>
+
+<p>
+    @Html.ActionLink("Agregar Nuevo Itinerario", "AddorEdit")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Salida)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Llegada)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RepartidorId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NombreRepartidor)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ZonaId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ZonaNombre)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descripcion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Salida)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Llegada)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RepartidorId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NombreRepartidor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ZonaId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ZonaNombre)
+            </td>
+            <td>
+                @Html.ActionLink("Modificar", "AddorEdit", new { id = item.Id }) |
+                @Html.ActionLink("Eliminar", "Delete", new { id = item.Id }) |
+                @if (item.Llegada == null)
+                {
+                    @Html.ActionLink("RegistrarLlegada", "RegistrarLlegada", new { detalleItinerarioId = item.IdDetalleItinerario })
+                }
+            </td>
+        </tr>
+    }
+
+</table>

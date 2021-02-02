@@ -1,0 +1,95 @@
+﻿@model IEnumerable<MonitoreoLogisticoClient.Models.Zona>
+
+@{
+    ViewBag.Title = "Listado de Zonas";
+}
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBK2dtqBK4ZsR1ybBGUJzVwpCMFUrFQdD4&libraries=drawing&callback=initMap"
+        async defer></script>
+<script>
+    var myArray = new Array();
+    var puntos = [];
+
+    @foreach (var d in ViewBag.CoordenadasTotalesListItems)
+    {
+        @:puntos = [];
+        foreach (var c in d.coordenadas)
+        {
+            @:puntos.push({lat: @c.lat,lng: @c.lng})
+        }
+
+        @:myArray.push({ zona: "@d.zonaid", parametros: puntos});
+    }
+
+    console.log("datos",myArray);
+    console.log("punto",puntos);
+
+
+    var map;
+    var markersArray = [];
+    function initMap() {
+
+        var mapOptions = {
+            center: { lat: -17.78218, lng: -63.17472 },
+            zoom: 14
+        }
+        map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+        if(typeof myArray !== 'undefined' && myArray.length > 0){
+
+            console.log("Hay datos mapas");
+            
+            for (var i = 0; i < myArray.length; i++) {
+                var dato = myArray[i];
+                if(dato.parametros.length > 0){
+                    var polygonDraw = new google.maps.Polygon({
+                        paths: dato.parametros,
+                        strokeColor: '#FF0000',
+                        strokeOpacity: 0.8,
+                        strokeWeight: 2,
+                        fillColor: '#A9A7A7',
+                        fillOpacity: 0.35,
+                        clickable: true,
+                    });
+                    polygonDraw.setMap(map);
+                
+                }
+                
+            }
+        
+        }
+
+
+    }
+
+</script>
+
+<h2>Listado de Zonas</h2>
+
+<p>
+    @Html.ActionLink("Registrar Zona", "AddorEdit")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nombre)
+        </td>
+        <td>
+            @Html.ActionLink("Modificar", "AddorEdit", new { id=item.Id }) |
+          @*  @Html.ActionLink("Details", "Details", new { id=item.Id }) |*@
+            @Html.ActionLink("Eliminar", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>
+
+<div id="map" style="height: 800px; width: 100%"></div>

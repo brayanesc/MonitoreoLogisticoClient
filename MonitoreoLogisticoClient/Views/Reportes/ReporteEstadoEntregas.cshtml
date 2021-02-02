@@ -1,0 +1,92 @@
+﻿
+@{
+    ViewBag.Title = "ReporteEstadoEntregas";
+}
+
+<h2>ReporteEstadoEntregas</h2>
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBK2dtqBK4ZsR1ybBGUJzVwpCMFUrFQdD4&libraries=drawing&callback=initMap"
+        async defer></script>
+<script>
+    var map;
+    var markersArray = [];
+    function initMap() {
+        var mapOptions = {
+            center: { lat: -17.78218, lng: -63.17472 },
+            zoom: 14
+        }
+        map = new google.maps.Map(document.getElementById("map"), mapOptions);
+    }
+
+
+    //obtenerDatos(callback-function)
+    function obtenerDatos(handleData) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("datosReporteEstadoEntregas", "Reportes")',
+            dataType: 'json',
+            contentType: 'application/x-www-form-urlencoded',
+            success: function (data) {
+                handleData(data);
+            }
+        });
+
+    }
+
+    //metodo de SignalR
+    $(function () {
+        if (window.jQuery) {
+            $.connection.hub.url = 'http://localhost:5757/signalr';
+            var hub = $.connection.hubPrueba;
+            //alert(hub);
+
+            hub.client.send = function (a) {
+                console.log(a);
+                //alert(a);
+                obtenerDatos(function (output) {
+                    console.log("DATOS: ", output);
+                    $.each(output, function (i, item) {
+                        console.log("item", item);
+
+
+                        var marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(item.Latitud, item.Longitud),
+                            map: map,
+                            title: item.Nombre,
+                            icon: item.Icono
+                        });
+
+                        var contentString = '<div id="content">' +
+                       '<div id="siteNotice">' +
+                           '</div>' +
+                           '<h3 id="firstHeading" class="firstHeading">' + item.Nombre + '</h3>' +
+                           '<div id="bodyContent">' + item.Latitud + " " + item.Longitud +
+                           '</div>' +
+                       '</div>';
+
+                        google.maps.event.addListener(marker, 'click', function () {
+                            var infowindow = new google.maps.InfoWindow({
+                                content: contentString
+                            });
+                            infowindow.open(map, marker);
+                        });
+
+
+                    });
+                });
+            };
+
+            $.connection.hub.start().done(function () {
+                hub.server.send("algo");
+
+            }).fail(function () {
+                //alert("Connection failed");
+            });
+        }
+
+    });
+
+</script>
+
+<div id="map" style="height: 800px; width: 100%"></div>
